@@ -1,0 +1,9 @@
+name = Battle for the Net Widget
+description = The Battle for the Net JavaScript widget wrapped in a Drupal Module
+core = 7.x
+
+configure = admin/config/external-campaigns/battle-for-the-net-widget
+package = External Campaigns
+version = "7.x-1.0"
+core = "7.x"
+project = "battle_for_the_net_widget"

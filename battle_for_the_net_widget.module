@@ -1,0 +1,79 @@
+<?php
+/**
+ * Implements hook_page_alter() to insert JavaScript to the appropriate scope/region of the page.
+ */
+function battle_for_the_net_widget_page_alter(&$page){
+    //Don't load the widget on Drupal Admin pages.
+    if (arg(0) == 'admin') {
+        return;
+    }
+    drupal_add_js(
+        array('battle_for_the_net_widget_settings' => array(
+                'theme' => variable_get('battle_for_the_net_widget_theme', 'default'),
+                'organization' => variable_get('battle_for_the_net_widget_organization', 'random'),
+                'delay' => variable_get('battle_for_the_net_widget_delay', 1000),
+                'date' => variable_get('battle_for_the_net_widget_date', new DateTime('2017-07-12T00:00:00+00:00'))->format('c'),
+                'always_show_widget' => variable_get('battle_for_the_net_widget_always_show_widget', false),
+            )
+        ), 'setting'
+    );
+
+    drupal_add_js(drupal_get_path('module', 'battle_for_the_net_widget').'/battle_for_the_net_widget.js',
+        array(
+            'type'=>'file',
+            'scope'=>'footer'
+        )
+    );
+
+    drupal_add_js('https://widget.battleforthenet.com/widget.js',
+        array(
+            'type'=>'external',
+            'scope'=>'footer',
+            'defer'=>true,
+        )
+    );
+    return;
+}
+
+/**
+ * Implements hook_permission().
+ */
+function battle_for_the_net_widget_permission() {
+    return array(
+        'administer battle for the net widget' => array(
+            'title' => t('Administer Battle for the Net Widget'),
+            'description' => t('Perform configuration tasks for Battle for the Net Widget.'),
+        ),
+    );
+}
+
+/**
+ * Implements hook_menu().
+ */
+
+function battle_for_the_net_widget_menu() {
+    $items ['admin/config/external-campaigns'] = array(
+        'title' => 'External Campaigns',
+        'description' => 'Configuration for modules related to external campaigns',
+        'position' => 'right',
+        'page callback' => 'system_admin_menu_block_page',
+        'access arguments' => array(
+            'administer site configuration'
+        ),
+        'weight' => -15,
+        'file' => 'system.admin.inc',
+        'file path' => drupal_get_path( 'module', 'system' )
+    );
+
+    $items['admin/config/external-campaigns/battle-for-the-net-widget'] = array(
+        'title' => 'Battle for the Net Widget',
+        'description' => 'Configure behavior for the Battle for the Net widget',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('battle_for_the_net_widget_admin_settings_form'),
+        'access arguments' => array('administer battle for the net widget'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'battle_for_the_net_widget.admin.inc',
+    );
+
+    return $items;
+}
