@@ -33,10 +33,11 @@ function battle_for_the_net_widget_admin_settings_form($form_state) {
         '#description' => t('Specify a delay (in milliseconds) before showing the widget. Default is 1 second.'),
         '#default_value' => variable_get('battle_for_the_net_widget_delay', 1000),
     );
+    $today = new DateTime();
     $default_date = array(
-        'year' => variable_get('battle_for_the_net_widget_date', new DateTime())->format('Y'),
-        'month' => variable_get('battle_for_the_net_widget_date', new DateTime())->format('n'),
-        'day' => variable_get('battle_for_the_net_widget_date', new DateTime())->format('j'),
+        'year' => variable_get('battle_for_the_net_widget_date_year', $today->format('Y')),
+        'month' => variable_get('battle_for_the_net_widget_date_month', $today->format('n')),
+        'day' => variable_get('battle_for_the_net_widget_date_day', $today->format('j')),
     );
     $form['general']['date'] = array(
         '#type' => 'date',
@@ -74,18 +75,13 @@ function battle_for_the_net_widget_admin_settings_form_validate($form, &$form_st
  * Implements hook_form_submit() for module settings configuration.
  */
 function battle_for_the_net_widget_admin_settings_form_submit($form, &$form_state){
-    //Convert our date to a string
-    $date_string = $form_state['values']['date']['month'] . "/" . $form_state['values']['date']['day'] . "/" . $form_state['values']['date']['year'];
-
-    //Convert that string to a DateTime object
-    $datetime = DateTime::createFromFormat('n/j/Y H:i:s', $date_string .'00:00:00');
-
-
     //Store our form values
     variable_set('battle_for_the_net_widget_theme', $form_state['values']['theme']);
     variable_set('battle_for_the_net_widget_organization', $form_state['values']['organization']);
     variable_set('battle_for_the_net_widget_delay', $form_state['values']['delay']);
-    variable_set('battle_for_the_net_widget_date', $datetime);
+    variable_set('battle_for_the_net_widget_date_year', $form_state['values']['date']['year']);
+    variable_set('battle_for_the_net_widget_date_month', $form_state['values']['date']['month']);
+    variable_set('battle_for_the_net_widget_date_day', $form_state['values']['date']['day']);
     variable_set('battle_for_the_net_widget_always_show_widget', (bool) $form_state['values']['always_show_widget']);
 
     drupal_set_message(t('Successfully saved settings.'), 'status');

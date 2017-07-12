@@ -12,7 +12,11 @@ function battle_for_the_net_widget_page_alter(&$page){
                 'theme' => variable_get('battle_for_the_net_widget_theme', 'default'),
                 'organization' => variable_get('battle_for_the_net_widget_organization', 'random'),
                 'delay' => variable_get('battle_for_the_net_widget_delay', 1000),
-                'date' => variable_get('battle_for_the_net_widget_date', new DateTime('2017-07-12T00:00:00+00:00'))->format('c'),
+                'date' => array(
+                    'day' => variable_get('battle_for_the_net_widget_date_day', 12),
+                    'month' => variable_get('battle_for_the_net_widget_date_month', 7),
+                    'year' => variable_get('battle_for_the_net_widget_date_year', 2017),
+                ),
                 'always_show_widget' => variable_get('battle_for_the_net_widget_always_show_widget', false),
             )
         ), 'setting'

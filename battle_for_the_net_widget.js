@@ -31,7 +31,11 @@ _bftn_options.delay = Drupal.settings.battle_for_the_net_widget_settings.delay; 
  * omitted. ISO-8601 dates are UTC time, three-argument dates (with a zero-based
  * month) are local time.
  */
-_bftn_options.date = new Date(Drupal.settings.battle_for_the_net_widget_settings.date); // @type {Date}
+_bftn_options.date = new Date(
+    Drupal.settings.battle_for_the_net_widget_settings.date.year,
+    Drupal.settings.battle_for_the_net_widget_settings.date.month - 1,
+    Drupal.settings.battle_for_the_net_widget_settings.date.day
+); // @type {Date}
 
 
 
